@@ -1,24 +1,23 @@
 import React from "react";
+import axios from "axios";
 
 // import About from "./pages/about";
 
-import logo from './logo.svg';
-
 function App() {
-
+  function requestLogin(e) {
+    e.preventDefault();
+    console.log('You clicked login');
+    const response = axios.get("hello");
+    response.then((res) => {
+      console.log(res.data);
+    });
+  }
   return (
     <div className="App">
     <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <button>Login</button>
+      <button onClick={requestLogin}>Login</button>
     </header>
   </div>
-    // Todo: set up multiple pages
-        // <BrowserRouter>
-        //   <Routes>
-        //     <Route exact path="/" render={props => <About/> } />
-        //   </Routes>
-        // </BrowserRouter>
   );
 }
 
