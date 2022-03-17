@@ -1,23 +1,21 @@
-import React from "react";
-import axios from "axios";
-
-// import About from "./pages/about";
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import LoginModal from './components/LoginModal'
+import './App.css'
 
 function App() {
-  function requestLogin(e) {
-    e.preventDefault();
-    console.log('You clicked login');
-    const response = axios.get("hello");
-    response.then((res) => {
-      console.log(res.data);
-    });
-  }
   return (
     <div className="App">
-    <header className="App-header">
-      <button onClick={requestLogin}>Login</button>
-    </header>
-  </div>
+      <header className="App-header">
+        <LoginModal />
+      </header>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="/" element={<LoginButton />} /> */}
+          {/* <Route path="/login" element={<LoginForm />} /> */}
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
