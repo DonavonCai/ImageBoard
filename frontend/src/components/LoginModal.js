@@ -22,6 +22,8 @@ export default function LoginModal() {
         border: '2px solid #000',
         boxShadow: 24,
         p: 4,
+        display: 'flex',
+        flexDirection: 'column',
     };
 
     return (
@@ -40,11 +42,10 @@ export default function LoginModal() {
         >
           <Fade in={open}>
             <Box sx={style}>
-              <Typography id="transition-modal-title" variant="h6" component="h2">
+              <Typography id="transition-modal-title" variant="h6" component="h2" align="center">
                 Welcome to my image board!
               </Typography>
-              <br />
-              <LoginForm />
+              <LoginForm/>
             </Box>
           </Fade>
         </Modal>
