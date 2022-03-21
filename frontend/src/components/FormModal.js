@@ -4,10 +4,10 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button'
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm';
 
-export default function LoginModal() {
+export default function FormModal(props) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -26,9 +26,20 @@ export default function LoginModal() {
         flexDirection: 'column',
     };
 
+    const formComponents = {
+      'LoginForm': LoginForm,
+      'RegisterForm': RegisterForm
+    }
+    const buttonTexts = {
+      'LoginForm': "Login",
+      'RegisterForm': "Sign up"
+    }
+
+    const EmbeddedForm = formComponents[props.form]
+
     return (
-      <div>
-        <Button variant="contained" onClick={handleOpen}>Login</Button>
+      <div class="form-modal">
+        <Button variant="contained" onClick={handleOpen} sx={{ marginRight: '1vh' }}>{buttonTexts[props.form]}</Button>
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
@@ -42,10 +53,7 @@ export default function LoginModal() {
         >
           <Fade in={open}>
             <Box sx={style}>
-              <Typography id="transition-modal-title" variant="h6" component="h2" align="center">
-                Welcome to my image board!
-              </Typography>
-              <LoginForm/>
+              <EmbeddedForm />
             </Box>
           </Fade>
         </Modal>

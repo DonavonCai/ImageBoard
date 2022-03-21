@@ -1,13 +1,14 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import LoginModal from './components/LoginModal'
+import FormModal from './components/FormModal'
 import './App.css'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <LoginModal />
+        <FormModal form="LoginForm"/>
+        <FormModal form="RegisterForm"/>
       </header>
       <BrowserRouter>
         <Routes>
