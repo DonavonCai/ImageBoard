@@ -38,7 +38,7 @@ export default function FormModal(props) {
     const EmbeddedForm = formComponents[props.form]
 
     return (
-      <div class="form-modal">
+      <div className="form-modal">
         <Button variant="contained" onClick={handleOpen} sx={{ marginRight: '1vh' }}>{buttonTexts[props.form]}</Button>
         <Modal
           aria-labelledby="transition-modal-title"
