@@ -1,7 +1,7 @@
 import React from 'react';
 // import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import FormModal from './components/FormModal'
-import ImageGrid from './components/ImageGrid'
+import { FormModal } from './components/FormModal'
+import  { ImageGrid } from './components/ImageGrid'
 import './App.css'
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
       <div id="Page-content"
         style={{
           width: "100%",
-          height: "100vh",
+          height: "auto",
           display: "flex",
           justifyContent: "center",
         }}

@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm';
 
-export default function FormModal(props) {
+export function FormModal(props) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);

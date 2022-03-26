@@ -22,6 +22,9 @@
   justify-content: right;
   font-size: calc(10px + 2vmin);
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .App-link {
