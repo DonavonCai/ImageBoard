@@ -1,20 +1,26 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import LoginModal from './components/LoginModal'
+// import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { FormModal } from './components/FormModal'
+import  { ImageGrid } from './components/ImageGrid'
 import './App.css'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <LoginModal />
+        <FormModal form="LoginForm"/>
+        <FormModal form="RegisterForm"/>
       </header>
-      <BrowserRouter>
-        <Routes>
-          {/* <Route path="/" element={<LoginButton />} /> */}
-          {/* <Route path="/login" element={<LoginForm />} /> */}
-        </Routes>
-      </BrowserRouter>
+      <div id="Page-content"
+        style={{
+          width: "100%",
+          height: "auto",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <ImageGrid />
+      </div>
     </div>
   );
 }
