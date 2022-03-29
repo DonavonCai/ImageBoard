@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
-import { ImageList } from '@mui/material'
-import { ImageListItem } from '@mui/material';
+import axios from 'axios'
+import { Component } from 'react'
+import { ImageList, ImageListItem } from '@mui/material'
 import InfiniteScroll from 'react-infinite-scroller'
+import { Image } from './Image'
 
 export class ImageGrid extends Component {
   constructor(props) {
@@ -12,42 +13,53 @@ export class ImageGrid extends Component {
   }
 
   componentDidMount() {
+    this.getImages();
   }
 
+  // todo: store multiple images in this.images[]
   getImages = () => {
-    console.log("get images")
-    this.setState({ images: [] });
-    // Todo: perform api call
-
-    // generate dummies for testing. remove later.
-    var newImages = []
-    for (var i = this.state.images.length; i < this.state.images.length + 4; i++) {
-      newImages.push("image" + String(i));
-    }
-    this.setState({ images: [...this.state.images, ...newImages] });
+    // this.setState({ images: [] });
+    // Perform api call
+    const url = "https://api.thedogapi.com/v1/images/search";
+    const params = "?"
+    const key = "api_key=1f729da2-ff96-4f37-9baf-f34da3543fd0"
+    axios.get(url + params + key)
+    .then(res => {
+      // console.log(res);
+      return res.data;
+    })
+    .then(data => {
+      console.log("data:")
+      console.log(data[0].url);
+      this.setState({images: data[0]});
+    })
+    .catch(err => {
+      console.error(err.message);
+    });
   }
 
+  // FIXME: this.state.images doesn't get the url
   render() {
     return (
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={this.getImages}
-          hasMore={this.state.images.length < 1000}
-          loader={<div className="loader" key={0}>Loading...</div>}
-          useWindow={true}
-          threshold={150}
-          style={{ width: "80%", overflow: "auto" }}
-          element={ImageList}
-          variant="woven"
-          cols={4}
-          rowHeight={164}
-        >
-          {this.state.images.map((i, index) => (
-              <ImageListItem sx={{ minHeight: 300, background: "gray" }}>
-                <img src="" alt="placeholder"loading="lazy" />
-              </ImageListItem>
-          ))}
-        </InfiniteScroll>
+        // <InfiniteScroll
+        //   pageStart={0}
+        //   loadMore={this.getImages}
+        //   hasMore={this.state.images.length < 100}
+        //   loader={<div className="loader" key={0}>Loading...</div>}
+        //   useWindow={true}
+        //   threshold={150}
+        //   style={{ width: "80%", overflow: "auto" }}
+        //   element={ImageList}
+        //   variant="woven"
+        //   cols={4}
+        //   rowHeight={164}
+        // >
+        //   {this.state.images.map((i, index) => (
+        //       <ImageListItem sx={{ minHeight: 300, background: "gray" }}>
+                <Image image={this.state.images}/>
+        //       </ImageListItem>
+        //   ))}
+        // </InfiniteScroll>
     );
   }
 }

@@ -1,4 +1,3 @@
-import React from 'react'
 import axios from 'axios'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -6,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import { FormControl } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
-export default function RegisterForm() {
+export function RegisterForm() {
     const {
         handleSubmit,
         formState: { errors }

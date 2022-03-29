@@ -1,9 +1,8 @@
-import React from 'react'
 import axios from 'axios'
 import { TextField, Typography, FormControl, Button } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
-export default function LoginForm() {
+export function LoginForm() {
   const {
     handleSubmit,
     formState: { errors }

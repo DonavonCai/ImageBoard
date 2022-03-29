@@ -4,8 +4,8 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button'
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
-import LoginForm from './LoginForm'
-import RegisterForm from './RegisterForm';
+import { LoginForm } from './LoginForm'
+import { RegisterForm } from './RegisterForm';
 
 export function FormModal(props) {
     const [open, setOpen] = React.useState(false);
