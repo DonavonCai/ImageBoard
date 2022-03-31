@@ -3,12 +3,14 @@ import { Component } from 'react'
 import { ImageList, ImageListItem } from '@mui/material'
 import InfiniteScroll from 'react-infinite-scroller'
 import { Image } from './Image'
+import { Buffer } from 'buffer';
 
 export class ImageGrid extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: []
+      images: [],
+      base64: ""
     };
   }
 
@@ -20,21 +22,21 @@ export class ImageGrid extends Component {
   getImages = () => {
     // this.setState({ images: [] });
     // Perform api call
-    const url = "https://api.thedogapi.com/v1/images/search";
+    const path = "/img";
     const params = "?"
-    const key = "api_key=1f729da2-ff96-4f37-9baf-f34da3543fd0"
-    axios.get(url + params + key)
-    .then(res => {
-      // console.log(res);
-      return res.data;
+    const key = ""
+    axios.get(path + params + key, {
+      proxy: {
+        host: 'localhost',
+        port: 8080
+      },
+      responseType: 'arraybuffer'
     })
-    .then(data => {
-      console.log("data:")
-      console.log(data[0].url);
-      this.setState({images: data[0]});
+    .then(res => {
+      this.setState({base64: Buffer.from(res.data, "binary").toString("base64")});
     })
     .catch(err => {
-      console.error(err.message);
+      console.error(err);
     });
   }
 
@@ -56,7 +58,7 @@ export class ImageGrid extends Component {
         // >
         //   {this.state.images.map((i, index) => (
         //       <ImageListItem sx={{ minHeight: 300, background: "gray" }}>
-                <Image image={this.state.images}/>
+                <Image base64={this.state.base64}/>
         //       </ImageListItem>
         //   ))}
         // </InfiniteScroll>

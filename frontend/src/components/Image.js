@@ -1,9 +1,7 @@
 import axios from 'axios'
 
 export function Image(props) {
-  console.log("props");
-  console.log(props);
   return (
-    <img src={props.image.url} alt="placeholder"loading="lazy" />
+    <img src={"data:image/jpeg;charset=utf-8;base64," + props.base64} alt="placeholder"loading="lazy" />
   );
 }
