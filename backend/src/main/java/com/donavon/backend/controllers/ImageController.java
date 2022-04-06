@@ -1,6 +1,6 @@
 package com.donavon.backend.controllers;
 
-import com.donavon.backend.services.ImageUploadService;
+// import com.donavon.backend.services.ImageUploadService;
 
 import com.donavon.backend.services.ImageDownloadService;
 import java.io.IOException;
@@ -14,8 +14,8 @@ import org.springframework.core.io.InputStreamResource;
 public class ImageController {
   @Autowired
   private ImageDownloadService imageDownloadService;
-  @Autowired
-  private ImageUploadService imageUploadService;
+  // @Autowired
+  // private ImageUploadService imageUploadService;
 
   @GetMapping("/img")
   public ResponseEntity<InputStreamResource> getImage() throws IOException {
