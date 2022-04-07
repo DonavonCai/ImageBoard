@@ -1,41 +1,18 @@
-import axios from 'axios'
 import { Component } from 'react'
 import { ImageList, ImageListItem } from '@mui/material'
 import InfiniteScroll from 'react-infinite-scroller'
 import { Image } from './Image'
-import { Buffer } from 'buffer'
-import { RingLoader } from 'react-spinners'
 
 export class ImageGrid extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: [],
-      base64: ""
+      images: []
     };
   }
 
-  componentDidMount() {
-    this.getImages();
-  }
-
-  // todo: store multiple images in this.images[]
   getImages = () => {
-    // this.setState({ images: [] });
-    // Perform api call
-    const path = "/img";
-    const params = "?"
-    const key = ""
-    axios.get(path + params + key, {
-      responseType: 'arraybuffer'
-    })
-    .then(res => {
-      this.setState({base64: Buffer.from(res.data, "binary").toString("base64")});
-      this.setState({images: [...this.state.images, "newImage"]});
-    })
-    .catch(err => {
-      console.error(err);
-    });
+      this.setState({images: [...this.state.images, "img" + this.state.images.length]});
   }
 
   render() {
@@ -44,9 +21,9 @@ export class ImageGrid extends Component {
         pageStart={0}
         loadMore={this.getImages}
         hasMore={true}
-        loader={<RingLoader loading={true} />}
+        loader={<div key={"loader"}/>}
         useWindow={true}
-        threshold={80}
+        threshold={100}
         initialLoad={true}
         style={{ width: "80%", overflow: "auto" }}
         element={ImageList}
@@ -55,8 +32,8 @@ export class ImageGrid extends Component {
         rowHeight={164}
       >
         {this.state.images.map((i, index) => (
-          <ImageListItem sx={{ width: 300, background: "gray" }}>
-            <Image base64={this.state.base64}/>
+          <ImageListItem key={i} sx={{ width: 300, height: 300, background: "gray" }}>
+            <Image key={this.state.images[i]}/>
           </ImageListItem>
          ))}
        </InfiniteScroll>
