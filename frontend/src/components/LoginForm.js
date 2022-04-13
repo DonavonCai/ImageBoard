@@ -9,7 +9,6 @@ export function LoginForm() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log('You clicked login');
     const response = axios.get("login");
     response.then((res) => {
       console.log(res.data);

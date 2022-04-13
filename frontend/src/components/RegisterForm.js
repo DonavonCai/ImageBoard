@@ -13,7 +13,7 @@ export function RegisterForm() {
 
       const onSubmit = (data) => {
         console.log('You clicked sign up');
-        const response = axios.get("register");
+        const response = axios.post("register");
         response.then((res) => {
           console.log(res.data);
         });
