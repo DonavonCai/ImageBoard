@@ -11,14 +11,7 @@ function App() {
         <FormModal form="LoginForm"/>
         <FormModal form="RegisterForm"/>
       </header>
-      <div id="Page-content"
-        style={{
-          width: "100%",
-          height: "auto",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <div id="Page-content">
         <ImageGrid />
       </div>
     </div>
