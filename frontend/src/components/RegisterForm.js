@@ -10,6 +10,7 @@ import * as Yup from 'yup'
 import './RegisterForm.css'
 
 export function RegisterForm() {
+  // Form validation:
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required('Username is required.'),
@@ -23,11 +24,10 @@ export function RegisterForm() {
       .oneOf([Yup.ref('password'), null], 'Passwords must match.')
       .required('Password confirmation is required.')
   });
-
   const formOptions = {resolver: yupResolver(validationSchema)};
 
   // Hooks:
-  const { register, handleSubmit, formState: {errors} } = useForm(formOptions);
+  const { register, handleSubmit, setError, formState: {errors} } = useForm(formOptions);
 
   // Props:
   const textFieldProps = {
@@ -38,10 +38,25 @@ export function RegisterForm() {
 
   // Helper functions:
   const onSubmit = (data) => {
-    console.log('You clicked sign up');
-    const response = axios.post("register");
-    response.then((res) => {
-      console.log(res.data);
+    const {username, email, password} = data;
+    axios.post("register", {
+      username: username,
+      email: email,
+      password: password,
+    })
+    .then((res) => {
+      console.log(res.status);
+    })
+    .catch((error) => {
+      if (error.response.status === 400) { // bad request
+        const field = error.response.data.field;
+        if (field === "username") {
+          setError("username", {type: "custom", message: "This username is already taken."});
+        }
+        if (field === "email") {
+          setError("email", {type: "custom", message: "This email is already taken."});
+        }
+      }
     });
   };
 
