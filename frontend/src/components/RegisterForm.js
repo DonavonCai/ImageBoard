@@ -76,56 +76,76 @@ export function RegisterForm() {
 
   return (
     <div id='register-form-container'>
-      <Typography id='modal-title' variant='h5' component='h2' align='center'>
-      Sign Up
+      <Typography
+          id='modal-title'
+          variant='h5'
+          component='h2'
+          align='center'>
+        Sign Up
       </Typography>
-      <Typography id='modal-instructions' color='#616161' align='center'>Please create a username, email, and password.</Typography>
+
+      <Typography
+          id='modal-instructions'
+          color='#616161'
+          align='center'>
+        Please create a username, email, and password.
+      </Typography>
+
       <FormControl align='center'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField  label='Username'
-                      {...register('username')}
-                      {...textFieldProps}>
+          <TextField
+              label='Username'
+              {...register('username')}
+              {...textFieldProps}>
           </TextField>
-          <ErrorMessage errors={errors}
-                        name='username'
-                        as={<p className='error-message' />}>
+          <ErrorMessage
+              errors={errors}
+              name='username'
+              as={<p className='error-message' />}>
           </ErrorMessage>
 
-          <TextField  label='Email'
-                      type='email'
-                      {...register('email')}
-                      {...textFieldProps}>
+          <TextField
+              label='Email'
+              type='email'
+              {...register('email')}
+              {...textFieldProps}>
           </TextField>
-          <ErrorMessage errors={errors}
-                        name='email'
-                        as={<p className='error-message' />}>
+          <ErrorMessage
+              errors={errors}
+              name='email'
+              as={<p className='error-message' />}>
           </ErrorMessage>
 
-          <TextField  label='Password'
-                      type={showPassword? 'text' : 'password'}
-                      {...register('password')}
-                      {...textFieldProps}
-                      InputProps={{endAdornment: passwordEye}}>
+          <TextField
+              label='Password'
+              type={showPassword? 'text' : 'password'}
+              {...register('password')}
+              {...textFieldProps}
+              InputProps={{endAdornment: passwordEye}}>
           </TextField>
-          <ErrorMessage errors={errors}
-                        name='password'
-                        as={<p className='error-message' />}>
+          <ErrorMessage
+              errors={errors}
+              name='password'
+              as={<p className='error-message' />}>
           </ErrorMessage>
 
-          <TextField  label='Password Confirmation'
-                      type={showPasswordConfirm? 'text' : 'password'}
-                      {...register('confirmPassword')}
-                      {...textFieldProps}
-                      InputProps={{endAdornment: passwordConfirmEye}}>
+          <TextField
+              label='Password Confirmation'
+              type={showPasswordConfirm? 'text' : 'password'}
+              {...register('confirmPassword')}
+              {...textFieldProps}
+              InputProps={{endAdornment: passwordConfirmEye}}>
           </TextField>
-          <ErrorMessage errors={errors}
-                        name='confirmPassword'
-                        as={<p className='error-message' />}>
+          <ErrorMessage
+              errors={errors}
+              name='confirmPassword'
+              as={<p className='error-message' />}>
           </ErrorMessage>
 
-          <Button type='submit'
-                  variant='contained'
-                  sx={{ display: 'block', marginTop: '8px' }}>
+          <Button
+              type='submit'
+              variant='contained'
+              sx={{ display: 'block', marginTop: '8px' }}>
             Sign Up
           </Button>
         </form>

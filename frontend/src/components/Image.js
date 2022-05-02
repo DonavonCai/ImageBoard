@@ -32,7 +32,9 @@ export class Image extends Component {
 
   render() {
     return (
-      <img src={"data:image/jpeg;charset=utf-8;base64," + this.state.base64} alt="" loading="lazy" />
+      <img  src={"data:image/jpeg;charset=utf-8;base64," + this.state.base64}
+            alt=""
+            loading="lazy" />
     );
   }
 }
