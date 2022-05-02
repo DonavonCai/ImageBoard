@@ -1,16 +1,23 @@
 import axios from 'axios'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography';
-import { FormControl } from '@mui/material'
+import { useState } from 'react'
+import { Button, TextField, Typography, FormControl }  from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './RegisterForm.css'
 
 export function RegisterForm() {
-  // Form validation:
+  // Constants:
+  const textFieldProps = {
+    size: "small",
+    variant: "outlined",
+    sx: { marginTop: '8px' },
+  };
+
+  // Form validation schema:
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required('Username is required.'),
@@ -28,18 +35,21 @@ export function RegisterForm() {
 
   // Hooks:
   const { register, handleSubmit, setError, formState: {errors} } = useForm(formOptions);
-
-  // Props:
-  const textFieldProps = {
-    size: "small",
-    variant: "outlined",
-    sx: { marginTop: '8px' },
-  };
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   // Helper functions:
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  }
+
+  const togglePasswordConfirm = () => {
+    setShowPasswordConfirm(!showPasswordConfirm);
+  }
+
   const onSubmit = (data) => {
     const {username, email, password} = data;
-    axios.post("register", {
+    axios.post('register', {
       username: username,
       email: email,
       password: password,
@@ -50,37 +60,74 @@ export function RegisterForm() {
     .catch((error) => {
       if (error.response.status === 400) { // bad request
         const field = error.response.data.field;
-        if (field === "username") {
-          setError("username", {type: "custom", message: "This username is already taken."});
+        if (field === 'username') {
+          setError('username', {type: "custom", message: "This username is already taken."});
         }
-        if (field === "email") {
-          setError("email", {type: "custom", message: "This email is already taken."});
+        if (field === 'email') {
+          setError('email', {type: "custom", message: "This email is already taken."});
         }
       }
     });
   };
 
+  // Eye components:
+  const passwordEye = <FontAwesomeIcon icon={faEye} onClick={togglePassword} />;
+  const passwordConfirmEye = <FontAwesomeIcon icon={faEye} onClick={togglePasswordConfirm} />
+
   return (
-    <div id="register-form-container">
-      <Typography id="modal-title" variant="h5" component="h2" align="center">
+    <div id='register-form-container'>
+      <Typography id='modal-title' variant='h5' component='h2' align='center'>
       Sign Up
       </Typography>
-      <Typography id="modal-instructions" color="#616161" align="center">Please create a username, email, and password.</Typography>
-      <FormControl align="center">
+      <Typography id='modal-instructions' color='#616161' align='center'>Please create a username, email, and password.</Typography>
+      <FormControl align='center'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField label="Username" {...register("username")} {...textFieldProps} />
-          <ErrorMessage errors={errors} name="username" as={<p className="error-message" />} />
+          <TextField  label='Username'
+                      {...register('username')}
+                      {...textFieldProps}>
+          </TextField>
+          <ErrorMessage errors={errors}
+                        name='username'
+                        as={<p className='error-message' />}>
+          </ErrorMessage>
 
-          <TextField label="Email" {...register("email")} type="email" {...textFieldProps} />
-          <ErrorMessage errors={errors} name="email" as={<p className="error-message" />} />
+          <TextField  label='Email'
+                      type='email'
+                      {...register('email')}
+                      {...textFieldProps}>
+          </TextField>
+          <ErrorMessage errors={errors}
+                        name='email'
+                        as={<p className='error-message' />}>
+          </ErrorMessage>
 
-          <TextField label="Password" {...register("password")} type="password" {...textFieldProps} />
-          <ErrorMessage errors={errors} name="password" as={<p className="error-message" />} />
+          <TextField  label='Password'
+                      type={showPassword? 'text' : 'password'}
+                      {...register('password')}
+                      {...textFieldProps}
+                      InputProps={{endAdornment: passwordEye}}>
+          </TextField>
+          <ErrorMessage errors={errors}
+                        name='password'
+                        as={<p className='error-message' />}>
+          </ErrorMessage>
 
-          <TextField label="Password Confirmation" {...register("confirmPassword")} type="password" {...textFieldProps} />
-          <ErrorMessage errors={errors} name="confirmPassword" as={<p className="error-message" />} />
+          <TextField  label='Password Confirmation'
+                      type={showPasswordConfirm? 'text' : 'password'}
+                      {...register('confirmPassword')}
+                      {...textFieldProps}
+                      InputProps={{endAdornment: passwordConfirmEye}}>
+          </TextField>
+          <ErrorMessage errors={errors}
+                        name='confirmPassword'
+                        as={<p className='error-message' />}>
+          </ErrorMessage>
 
-          <Button type="submit" variant="contained" sx={{ display: 'block', marginTop: '8px' }}>Sign Up</Button>
+          <Button type='submit'
+                  variant='contained'
+                  sx={{ display: 'block', marginTop: '8px' }}>
+            Sign Up
+          </Button>
         </form>
       </FormControl>
     </div>

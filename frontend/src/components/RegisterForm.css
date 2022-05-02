@@ -6,3 +6,8 @@
   display: inline;
   content: "⚠ ";
 }
+
+.fa-eye:hover {
+  color: #808080;
+  cursor: pointer;
+}
