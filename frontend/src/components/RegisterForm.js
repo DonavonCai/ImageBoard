@@ -5,9 +5,11 @@ import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faEye } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './RegisterForm.css'
+
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 export function RegisterForm() {
   // Constants:
@@ -70,10 +72,6 @@ export function RegisterForm() {
     });
   };
 
-  // Eye components:
-  const passwordEye = <FontAwesomeIcon icon={faEye} onClick={togglePassword} />;
-  const passwordConfirmEye = <FontAwesomeIcon icon={faEye} onClick={togglePasswordConfirm} />
-
   return (
     <div id='register-form-container'>
       <Typography
@@ -121,7 +119,11 @@ export function RegisterForm() {
               type={showPassword? 'text' : 'password'}
               {...register('password')}
               {...textFieldProps}
-              InputProps={{endAdornment: passwordEye}}>
+              InputProps={{endAdornment:
+                            <div class='eye' onClick={togglePassword}>
+                              {showPassword? <Visibility /> : <VisibilityOff />}
+                            </div>
+              }}>
           </TextField>
           <ErrorMessage
               errors={errors}
@@ -134,7 +136,11 @@ export function RegisterForm() {
               type={showPasswordConfirm? 'text' : 'password'}
               {...register('confirmPassword')}
               {...textFieldProps}
-              InputProps={{endAdornment: passwordConfirmEye}}>
+              InputProps={{endAdornment:
+                            <div class='eye' onClick={togglePasswordConfirm}>
+                              {showPasswordConfirm? <Visibility /> : <VisibilityOff />}
+                            </div>
+              }}>
           </TextField>
           <ErrorMessage
               errors={errors}
