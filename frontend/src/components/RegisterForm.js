@@ -5,8 +5,6 @@ import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-// import { faEye } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './RegisterForm.css'
 
 import { Visibility, VisibilityOff } from '@mui/icons-material'
@@ -25,7 +23,7 @@ export function RegisterForm() {
       .required('Username is required.'),
     email: Yup.string()
       .required('Email is required.')
-      .email('Email is invalid.'),
+      .email('Must be a valid email.'),
     password: Yup.string()
       .min(8, 'Password must be at least 8 characters.')
       .required('Password is required.'),
@@ -33,10 +31,12 @@ export function RegisterForm() {
       .oneOf([Yup.ref('password'), null], 'Passwords must match.')
       .required('Password confirmation is required.')
   });
-  const formOptions = {resolver: yupResolver(validationSchema)};
 
   // Hooks:
-  const { register, handleSubmit, setError, formState: {errors} } = useForm(formOptions);
+  const { register, getValues, handleSubmit, setError, formState: {errors} } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(validationSchema)
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
@@ -47,6 +47,23 @@ export function RegisterForm() {
 
   const togglePasswordConfirm = () => {
     setShowPasswordConfirm(!showPasswordConfirm);
+  }
+
+  const checkAvailability = (fieldName) => {
+    const fieldData = getValues(fieldName);
+
+    if (!fieldData) return;
+
+    axios.get('register', {params: {field: fieldName, data: fieldData}})
+    .then((res) => {
+      console.log(res);
+      let fieldExists = res.data;
+      if (fieldExists)
+        setError(fieldName, {type: "custom", message: "This " + fieldName + " is already taken."});
+    })
+    .catch((error) => {
+      console.error(error.response.data);
+    })
   }
 
   const onSubmit = (data) => {
@@ -60,7 +77,7 @@ export function RegisterForm() {
       console.log(res.status);
     })
     .catch((error) => {
-      if (error.response.status === 400) { // bad request
+      if (error.response.status === 409) { // conflict
         const field = error.response.data.field;
         if (field === 'username') {
           setError('username', {type: "custom", message: "This username is already taken."});
@@ -93,7 +110,9 @@ export function RegisterForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
               label='Username'
-              {...register('username')}
+              {...register('username', {
+                onBlur: (e) => {checkAvailability('username')}
+              })}
               {...textFieldProps}>
           </TextField>
           <ErrorMessage
@@ -105,7 +124,9 @@ export function RegisterForm() {
           <TextField
               label='Email'
               type='email'
-              {...register('email')}
+              {...register('email', {
+                onBlur: (e) => {checkAvailability('email')}
+              })}
               {...textFieldProps}>
           </TextField>
           <ErrorMessage
