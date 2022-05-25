@@ -11,12 +11,24 @@ import com.donavon.backend.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{ // TODO: should i extract into another service?
   @Autowired
   private UserRepository repo;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    List<User> user = repo.findByUsername(username);
+    if (user.isEmpty()) { // TODO: this is weird. Consider using Optional<User> in repo?
+      throw new UsernameNotFoundException("User not present.");
+    }
+    return user.get(0);
+  }
 
   public ResponseEntity<?> login(LoginInfo info) {
     // TODO: implement user sessions?
