@@ -1,6 +1,7 @@
 package com.donavon.backend.controllers;
 
 import com.donavon.backend.model.User;
+import com.donavon.backend.model.LoginInfo;
 import com.donavon.backend.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,9 @@ public class UserController {
   UserService userService;
 
   // todo: capture info from query params
-  @GetMapping("/login")
-  public String login() {
+  @PostMapping("/login")
+  public String login(@RequestBody LoginInfo info) {
+    System.out.println(info);
     return "Spring boot got a request for login.";
   }
 

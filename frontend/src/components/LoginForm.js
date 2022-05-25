@@ -3,16 +3,20 @@ import { TextField, Typography, FormControl, Button } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
 export function LoginForm() {
-  const {
-    handleSubmit,
-    formState: { errors }
-  } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = (data) => {
-    const response = axios.get("login");
-    response.then((res) => {
-      console.log(res.data);
-    });
+  const onSubmit = async (data) => {
+    const {username, password} = data;
+    try {
+      const response = await axios.post("login", {
+        username: username,
+        password: password
+      });
+
+      console.log(response.data);
+    } catch(error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -39,7 +43,8 @@ export function LoginForm() {
               size="small"
               variant="outlined"
               sx={{ marginTop: '8px' }}
-              required>
+              required
+              {...register('username')}>
           </TextField>
 
           <TextField
@@ -48,7 +53,8 @@ export function LoginForm() {
               variant="outlined"
               sx={{ marginTop: '8px' }}
               type="password"
-              required>
+              required
+              {...register('password')}>
           </TextField>
 
           <Button

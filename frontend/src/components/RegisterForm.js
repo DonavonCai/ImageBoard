@@ -32,20 +32,23 @@ export function RegisterForm() {
   const [enableButton, setEnableButton] = useState(true);
 
   // Helper functions:
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const {username, email, password} = data;
-    axios.post('register', {
-      username: username,
-      email: email,
-      password: password,
-    })
-    .then((res) => {
-      if (res.status === StatusCodes.OK) {
+
+    try {
+      const response = await axios.post('register', {
+        username: username,
+        email: email,
+        password: password,
+      });
+
+      if (response.status === StatusCodes.OK) {
         setEnableButton(false);
         // TODO: log user in?
+        window.location.reload(false);
       }
-    })
-    .catch((error) => {
+    } catch(error) {
+      // TODO: disable sign up button until all errors handled.
       if (error.response.status === StatusCodes.CONFLICT) {
         const field = error.response.data.field;
         if (field === 'username') {
@@ -55,8 +58,8 @@ export function RegisterForm() {
           setError('email', {type: "custom", message: "This email is already taken."});
         }
       }
-    });
-  };
+    };
+  }
 
   return (
     <div id='register-form-container'>
