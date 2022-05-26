@@ -14,12 +14,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements UserDetailsService{ // TODO: should i extract into another service?
+public class UserService implements UserDetailsService { // TODO: should i extract into another service?
   @Autowired
   private UserRepository repo;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -46,12 +50,16 @@ public class UserService implements UserDetailsService{ // TODO: should i extrac
   }
 
   public ResponseEntity<?> createUser(User user) {
+    // TODO: instead, try loadUserByUsername?
     if (repo.existsByUsername(user.getUsername())) {
       throw new DupUsernameException();
     }
     if (repo.existsByEmail(user.getEmail())) {
       throw new DupEmailException();
     }
+
+    String hashedPassword = passwordEncoder.encode(user.getPassword());
+    user.setPassword(hashedPassword);
 
     try {
       repo.insert(user);
