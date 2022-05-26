@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -39,10 +40,12 @@ public CorsConfigurationSource corsConfigurationSource() {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+    /* NOTE: Disabling csrf causes Spring Security to try to authenticate /img requests.
+     * This leads to a nullptr exception in AuthProvider.java, where auth.getCredentials = ""
+     */
     http
       .cors()
         .and()
-      .csrf().disable()
       .authorizeRequests()
         .antMatchers("/", "/img**", "/register**").permitAll()
         .anyRequest().authenticated()
@@ -50,13 +53,11 @@ public CorsConfigurationSource corsConfigurationSource() {
       .formLogin()
         .loginPage("/login")
         .loginProcessingUrl("/userAuth")
-        .defaultSuccessUrl("/")
-        .failureUrl("/fail?error=true")
+        .successForwardUrl("/login_success_handler")
+        .failureForwardUrl("/login_failure_handler")
         .permitAll()
         .and()
       .logout()
-        .permitAll()
-        .and()
-      .httpBasic();
+        .permitAll();
 	}
 }

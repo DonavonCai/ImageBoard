@@ -34,21 +34,6 @@ public class UserService implements UserDetailsService { // TODO: should i extra
     return user.get(0);
   }
 
-  public ResponseEntity<?> login(LoginInfo info) {
-    // TODO: implement user sessions?
-    List<User> users = repo.findByUsername(info.getUsername());
-
-    if (users.isEmpty()) {
-      // TODO: return status not found?
-    }
-    User user = users.get(0);
-    if (user.getPassword().equals(info.getPassword())) {
-      // TODO: return ok
-    }
-    // TODO: return not created?
-    return ResponseEntity.ok().body("Logged in");
-  }
-
   public ResponseEntity<?> createUser(User user) {
     // TODO: instead, try loadUserByUsername?
     if (repo.existsByUsername(user.getUsername())) {

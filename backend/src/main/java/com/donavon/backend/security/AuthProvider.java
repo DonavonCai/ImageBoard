@@ -32,10 +32,16 @@ import org.springframework.stereotype.Component;
 
   @Override
   public Authentication authenticate(Authentication auth) throws AuthenticationException {
+    if (auth.getPrincipal() == "" || auth.getCredentials() == "") {
+      throw new BadCredentialsException("Missing fields in authorization!");
+    }
+
     String username = (String)auth.getPrincipal();
     User user = (User)userService.loadUserByUsername(username);
+    String formPassword = auth.getCredentials().toString();
+    String hashedPassword = user.getPassword();
 
-    boolean matches = passwordEncoder.matches(auth.getCredentials().toString(), user.getPassword());
+    boolean matches = passwordEncoder.matches(formPassword, hashedPassword);
     if (!matches) {
       processFailedAttempt(user);
       throw new BadCredentialsException("Passwords do not match.");

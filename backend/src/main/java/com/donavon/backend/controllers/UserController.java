@@ -17,10 +17,19 @@ public class UserController {
   @Autowired
   UserService userService;
 
-  // todo: capture info from query params
   @GetMapping("/login")
   public String login() {
     return "Spring boot got a request for login.";
+  }
+
+  @PostMapping("/login_success_handler")
+  public String loginSuccessHandler() {
+    return "logged in!!!";
+  }
+
+  @PostMapping("/login_failure_handler")
+  public String loginFailureHandler() {
+    return "failed :(";
   }
 
   @PostMapping("/register")
