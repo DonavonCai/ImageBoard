@@ -10,11 +10,11 @@ import com.donavon.backend.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -32,17 +32,23 @@ import org.springframework.stereotype.Component;
 
   @Override
   public Authentication authenticate(Authentication auth) throws AuthenticationException {
-    String username = auth.getName();
-    Optional<Attempts> userAttempts = attemptsRepo.findByUsername(username);
+    String username = (String)auth.getPrincipal();
     User user = (User)userService.loadUserByUsername(username);
 
-    // Process attempts
-    Attempts attempts = null;
-    if (userAttempts.isEmpty()) {
-      attempts = new Attempts(username, 1);
-      attemptsRepo.save(attempts);
+    boolean matches = passwordEncoder.matches(auth.getCredentials().toString(), user.getPassword());
+    if (!matches) {
+      processFailedAttempt(user);
+      throw new BadCredentialsException("Passwords do not match.");
     }
-    else {
+    return new UsernamePasswordAuthenticationToken(username, user.getPassword());
+  }
+
+  private void processFailedAttempt(User user) throws AuthenticationException {
+    String username = user.getUsername();
+    Optional<Attempts> userAttempts = attemptsRepo.findByUsername(username);
+
+    Attempts attempts;
+    if (userAttempts.isPresent()) {
       attempts = userAttempts.get();
       attempts.setAttempts(attempts.getAttempts() + 1);
       attemptsRepo.save(attempts);
@@ -50,13 +56,13 @@ import org.springframework.stereotype.Component;
       if (attempts.getAttempts() >= ATTEMPTS_LIMIT) {
         user.setAccountNonLocked(false);
         userRepo.save(user);
-        throw new LockedException("Too many invalid attempts. Account is locked!!");
+        throw new LockedException("Too many invalid attempts. Account is locked!");
       }
     }
-
-    // TODO: match passwords using PasswordEncoder matches()
-    passwordEncoder.matches(auth.getCredentials().toString(), user.getPassword());
-    return new UsernamePasswordAuthenticationToken(username, user.getPassword());
+    else {
+      attempts = new Attempts(username, 1);
+      attemptsRepo.save(attempts);
+    }
   }
 
   @Override

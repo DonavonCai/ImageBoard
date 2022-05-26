@@ -7,13 +7,14 @@ export function LoginForm() {
 
   const onSubmit = async (data) => {
     const {username, password} = data;
-    try {
-      const response = await axios.post("login", {
-        username: username,
-        password: password
-      });
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
 
-      console.log(response.data);
+    try {
+      const response = await axios.post("userAuth", formData);
+      console.log(response);
+
     } catch(error) {
       console.log(error);
     }

@@ -18,9 +18,8 @@ public class UserController {
   UserService userService;
 
   // todo: capture info from query params
-  @PostMapping("/login")
-  public String login(@RequestBody LoginInfo info) {
-    System.out.println(info);
+  @GetMapping("/login")
+  public String login() {
     return "Spring boot got a request for login.";
   }
 
