@@ -1,7 +1,6 @@
 package com.donavon.backend.controllers;
 
 import com.donavon.backend.model.User;
-import com.donavon.backend.model.LoginInfo;
 import com.donavon.backend.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +23,13 @@ public class UserController {
 
   @PostMapping("/login_success_handler")
   public String loginSuccessHandler() {
+    // TODO: send request indicating login as successful
     return "logged in!!!";
   }
 
   @PostMapping("/login_failure_handler")
   public String loginFailureHandler() {
+    // TODO: send request indicating failed login
     return "failed :(";
   }
 

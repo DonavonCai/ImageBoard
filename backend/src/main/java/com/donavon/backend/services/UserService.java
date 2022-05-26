@@ -1,11 +1,10 @@
 package com.donavon.backend.services;
 
-import java.util.List;
+import java.util.Optional;
 
 import com.donavon.backend.exception.DupEmailException;
 import com.donavon.backend.exception.DupUsernameException;
 import com.donavon.backend.exception.UndefinedFieldException;
-import com.donavon.backend.model.LoginInfo;
 import com.donavon.backend.model.User;
 import com.donavon.backend.repository.UserRepository;
 
@@ -27,11 +26,11 @@ public class UserService implements UserDetailsService { // TODO: should i extra
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    List<User> user = repo.findByUsername(username);
-    if (user.isEmpty()) { // TODO: this is weird. Consider using Optional<User> in repo?
+    Optional<User> user = repo.findByUsername(username); // TODO: add a check for if username is empty?
+    if (!user.isPresent()) {
       throw new UsernameNotFoundException("User not present.");
     }
-    return user.get(0);
+    return user.get();
   }
 
   public ResponseEntity<?> createUser(User user) {
