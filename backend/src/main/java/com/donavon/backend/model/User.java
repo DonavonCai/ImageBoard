@@ -27,7 +27,7 @@ public class User implements UserDetails {
     this.username = username;
     this.email = email;
     this.password = password;
-    this.accountNonLocked = accountNonLocked;
+    this.accountNonLocked = true;
   }
 
   @Override
@@ -37,7 +37,8 @@ public class User implements UserDetails {
 
   @Override
   public boolean isAccountNonLocked() {
-    return this.accountNonLocked;
+    return true;
+    // return this.accountNonLocked;
   }
 
   @Override

@@ -9,6 +9,7 @@ import com.donavon.backend.model.User;
 import com.donavon.backend.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +23,7 @@ public class UserService implements UserDetailsService { // TODO: should i extra
   private UserRepository repo;
 
   @Autowired
+  @Lazy
   private PasswordEncoder passwordEncoder;
 
   @Override
