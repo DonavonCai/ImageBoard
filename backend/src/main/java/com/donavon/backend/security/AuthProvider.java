@@ -11,6 +11,7 @@ import com.donavon.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,10 @@ import org.springframework.stereotype.Component;
   public Authentication authenticate(Authentication auth) throws AuthenticationException {
     if (auth.getPrincipal() == "" || auth.getCredentials() == "") {
       throw new BadCredentialsException("Missing fields in authorization!");
+    }
+
+    if (auth.getPrincipal() == null || auth.getCredentials() == null) {
+      throw new InternalAuthenticationServiceException("Principal or credentials are null!");
     }
 
     String username = (String)auth.getPrincipal();
@@ -73,6 +78,6 @@ import org.springframework.stereotype.Component;
 
   @Override
   public boolean supports(Class<?> authentication) {
-    return true;
+    return authentication.equals(UsernamePasswordAuthenticationToken.class);
   }
 }

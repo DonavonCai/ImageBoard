@@ -24,6 +24,9 @@ function App() {
                       Sign Up
                     </Button>
                   </Link>
+                  <form action="/logout" method="post">
+                    <input type="submit" value="Sign out"/>
+                  </form>
                 </header>
               </div>
             }>

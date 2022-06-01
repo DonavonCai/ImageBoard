@@ -14,6 +14,7 @@ export function LoginForm() {
     try {
       const response = await axios.post("userAuth", formData);
       console.log(response);
+      // TODO: if response.data... logged in successfully
 
     } catch(error) {
       console.log(error);
