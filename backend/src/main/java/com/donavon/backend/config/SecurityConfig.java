@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.donavon.backend.security.LoginFailureHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,27 +37,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("*"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+    configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+
+    return source;
+  }
+
+  @Bean
+  public AuthenticationFailureHandler authenticationFailureHandler() {
+    return new LoginFailureHandler();
+  }
+
   @Override
   protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
     auth
       .userDetailsService(userDetailsService)
       .passwordEncoder(passwordEncoder());
-  }
-
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-      CorsConfiguration configuration = new CorsConfiguration();
-      configuration.setAllowedOrigins(Arrays.asList("*"));
-      configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH",
-      "DELETE", "OPTIONS"));
-      configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type",
-      "x-auth-token"));
-      configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
-      UrlBasedCorsConfigurationSource source = new
-      UrlBasedCorsConfigurationSource();
-      source.registerCorsConfiguration("/**", configuration);
-
-      return source;
   }
 
 	@Override
@@ -71,26 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/").permitAll()
         .antMatchers("/login**").permitAll()
         .antMatchers("/img**").permitAll()
-        .antMatchers("/register**").permitAll().anyRequest().authenticated()
+        .antMatchers("/register**").permitAll()
         .and()
       .formLogin()
         .loginPage("/login")
         .loginProcessingUrl("/userAuth")
         .successForwardUrl("/login_success_handler")
-        // .successHandler(loginSuccessHandler) // FIXME: why isn't this called!!!!!!!
-        .failureHandler(new AuthenticationFailureHandler() {
-          @Override
-          public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                  AuthenticationException exception) throws IOException, ServletException {
-              String username = request.getParameter("username");
-              String error = exception.getMessage();
-              System.out.println("A failed login attempt with username: "
-                                  + username + ". Reason: " + error);
-
-              String redirectUrl = request.getContextPath() + "/login?error";
-              response.sendRedirect(redirectUrl);
-          }
-      })
+        .failureHandler(authenticationFailureHandler())
         .permitAll()
         .and()
       .logout()
