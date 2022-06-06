@@ -70,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http
       .cors()
         .and()
-      .csrf().ignoringAntMatchers("/userAuth**", "/img**")
+      .csrf().ignoringAntMatchers("/userAuth**", "/img**", "/register**") // returns 403 forbidden if not authenticated
         .and()
       .authorizeRequests()
         .antMatchers("/").permitAll()

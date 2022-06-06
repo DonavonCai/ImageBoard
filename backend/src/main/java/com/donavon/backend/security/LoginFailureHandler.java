@@ -23,8 +23,8 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     String error = exception.getMessage();
     System.out.println("A failed login attempt with username: " + username + ". Reason: " + error);
 
-    // String redirectUrl = request.getContextPath() + "/login?error";
-    // response.sendRedirect(redirectUrl);
+    // TODO: process failed attempts
+
     String message = "Login failed.";
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.getWriter().write(message);

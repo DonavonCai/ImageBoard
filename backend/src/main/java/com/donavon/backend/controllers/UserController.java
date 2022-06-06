@@ -48,13 +48,6 @@ public class UserController {
     return ResponseEntity.ok().body("logged in");
   }
 
-  // @PostMapping("/login_failure_handler")
-  // public String loginFailureHandler() {
-  //   // TODO: send request indicating failed login
-  //   System.out.println("login failure handler");
-  //   return "failed :(";
-  // }
-
   @PostMapping("/register")
   public ResponseEntity<?> register(@RequestBody User user) {
     return userService.createUser(user);
