@@ -21,13 +21,19 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserDetailsService { // TODO: should i extract into another service?
   @Autowired
   private UserRepository repo;
-
   @Autowired
   @Lazy
   private PasswordEncoder passwordEncoder;
 
+  private final int MAX_ATTEMPTS = 5;
+
+  // Public methods:
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    if (username.isEmpty()) {
+      return null;
+    }
+
     Optional<User> user = repo.findByUsername(username); // TODO: add a check for if username is empty?
     if (!user.isPresent()) {
       throw new UsernameNotFoundException("User not present.");
@@ -69,5 +75,16 @@ public class UserService implements UserDetailsService { // TODO: should i extra
       throw new UndefinedFieldException(field);
     }
     return ResponseEntity.ok().body(result);
+  }
+
+  public void processFailedAttempt(String username) {
+    User user = (User)loadUserByUsername(username);
+
+    int attempts = user.getAttempts() + 1;
+    if (attempts >= MAX_ATTEMPTS) { // lock account
+      user.setAccountNonLocked(false);
+    }
+    user.setAttempts(attempts);
+    repo.save(user);
   }
 }
