@@ -39,18 +39,19 @@ export function FormModal(props) {
 
     return (
       <div className="form-modal">
-        <Button variant="contained" onClick={handleOpen} sx={{ marginRight: '1vh' }}>{buttonTexts[props.form]}</Button>
+        <Button variant="contained"
+                onClick={handleOpen}
+                sx={{ marginRight: '1vh' }}>
+          {buttonTexts[props.form]}
+        </Button>
         <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{ timeout: 500 }}>
           <Fade in={open}>
             <Box sx={style}>
               <EmbeddedForm />

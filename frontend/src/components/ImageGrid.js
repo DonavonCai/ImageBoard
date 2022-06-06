@@ -17,25 +17,27 @@ export class ImageGrid extends Component {
 
   render() {
     return (
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={this.getImages}
-        hasMore={true}
-        loader={<div key={"loader"}/>}
-        useWindow={true}
-        threshold={100}
-        initialLoad={true}
-        style={{ width: "80%", overflow: "auto" }}
-        element={ImageList}
-        variant="woven"
-        cols={4}
-        rowHeight={164}
-      >
+      <InfiniteScroll pageStart={0}
+                      loadMore={this.getImages}
+                      hasMore={true}
+                      loader={<div key={"loader"}/>}
+                      useWindow={true}
+                      threshold={100}
+                      initialLoad={true}
+                      style={{ width: "80%", overflow: "auto" }}
+                      element={ImageList}
+                      variant="woven"
+                      cols={4}
+                      rowHeight={164}>
         {this.state.images.map((i, index) => (
-          <ImageListItem key={i} sx={{ width: 300, height: 300, background: "gray" }}>
+          <ImageListItem  key={i}
+                          sx={{ width: 300,
+                                height: 300,
+                                background: "gray" }}>
             <Image key={this.state.images[i]}/>
           </ImageListItem>
          ))}
+
        </InfiniteScroll>
     );
   }

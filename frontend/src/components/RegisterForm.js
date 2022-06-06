@@ -1,39 +1,126 @@
 import axios from 'axios'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography';
-import { FormControl } from '@mui/material'
+import { useState } from 'react'
+import { Button, Typography, FormControl }  from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { StatusCodes } from 'http-status-codes'
+import { RegisterTextField, RegisterPasswordField } from './RegisterInputFields'
+import * as Yup from 'yup'
+import './RegisterForm.css'
 
 export function RegisterForm() {
-    const {
-        handleSubmit,
-        formState: { errors }
-      } = useForm();
+  // Form validation schema:
+  const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .required('Username is required.'),
+    email: Yup.string()
+      .required('Email is required.')
+      .email('Must be a valid email.'),
+    password: Yup.string()
+      .min(8, 'Password must be at least 8 characters.')
+      .required('Password is required.'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match.')
+      .required('Password confirmation is required.')
+  });
 
-      const onSubmit = (data) => {
-        console.log('You clicked sign up');
-        const response = axios.get("register");
-        response.then((res) => {
-          console.log(res.data);
-        });
-      };
+  // Hooks:
+  const { register, getValues, handleSubmit, setError, formState: {errors} } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(validationSchema)
+  });
+  const [enableButton, setEnableButton] = useState(true);
 
-      return (
-        <div id="register-form-container">
-          <Typography id="modal-title" variant="h5" component="h2" align="center">
-          Sign Up
-          </Typography>
-          <Typography id="modal-instructions" color="#616161" align="center">Please create a username, email, and password.</Typography>
-          <FormControl align="center">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <TextField label="Username" size="small" variant="outlined" sx={{ marginTop: '8px' }} required />
-              <TextField label="Email" size="small" variant="outlined" sx={{ marginTop: '8px' }} required />
-              <TextField label="Password" size="small" variant="outlined" sx={{ marginTop: '8px' }} type="password" required />
-              <TextField label="Password Confirmation" size="small" variant="outlined" sx={{ marginTop: '8px' }} type="password" required />
-              <Button type="submit" variant="contained" sx={{ display: 'block', marginTop: '8px' }}>Sign Up</Button>
-            </form>
-          </FormControl>
-        </div>
-      );
+  // Helper functions:
+  const onSubmit = async (data) => {
+    const {username, email, password} = data;
+
+    try {
+      const response = await axios.post('register', {
+        username: username,
+        email: email,
+        password: password,
+      });
+
+      if (response.status === StatusCodes.OK) {
+        setEnableButton(false);
+        // TODO: log user in?
+        window.location.reload(false);
+      }
+    } catch(error) {
+      // TODO: disable sign up button until all errors handled.
+      if (error.response.status === StatusCodes.CONFLICT) {
+        const field = error.response.data.field;
+        if (field === 'username') {
+          setError('username', {type: "custom", message: "This username is already taken."});
+        }
+        if (field === 'email') {
+          setError('email', {type: "custom", message: "This email is already taken."});
+        }
+      }
+    };
+  }
+
+  return (
+    <div id='register-form-container'>
+      <Typography
+          id='modal-title'
+          variant='h5'
+          component='h2'
+          align='center'>
+        Sign Up
+      </Typography>
+
+      <Typography
+          id='modal-instructions'
+          color='#616161'
+          align='center'>
+        Please create a username, email, and password.
+      </Typography>
+
+      <FormControl align='center'>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <RegisterTextField
+              name='username'
+              displayName='Username'
+              register={register}
+              getValues={getValues}
+              errors={errors}
+              setError={setError}>
+          </RegisterTextField>
+
+          <RegisterTextField
+              name='email'
+              displayName='Email'
+              register={register}
+              getValues={getValues}
+              errors={errors}
+              setError={setError}>
+          </RegisterTextField>
+
+          <RegisterPasswordField
+              name='password'
+              displayName='Password'
+              register={register}
+              errors={errors}>
+          </RegisterPasswordField>
+
+          <RegisterPasswordField
+              name='confirmPassword'
+              displayName='Password Confirmation'
+              register={register}
+              errors={errors}>
+          </RegisterPasswordField>
+
+          <Button
+              type='submit'
+              disabled={!enableButton}
+              variant='contained'
+              sx={{ display: 'block', marginTop: '8px' }}>
+            Sign Up
+          </Button>
+        </form>
+      </FormControl>
+    </div>
+  );
 }

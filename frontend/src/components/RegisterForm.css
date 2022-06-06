@@ -1,0 +1,13 @@
+.error-message {
+  color: red;
+}
+
+.error-message::before {
+  display: inline;
+  content: "⚠ ";
+}
+
+.eye:hover {
+  color: #808080;
+  cursor: pointer;
+}
