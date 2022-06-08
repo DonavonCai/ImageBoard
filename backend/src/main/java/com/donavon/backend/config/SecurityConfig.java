@@ -7,8 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.donavon.backend.security.LoginFailureHandler;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +22,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.donavon.backend.authenticationHandlers.LoginFailureHandler;
 
 @Configuration
 // @EnableConfigurationProperties
@@ -85,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .failureHandler(authenticationFailureHandler())
         .permitAll()
         .and()
-      .logout()
+      .logout() // TODO: implement logout handler
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         .logoutSuccessUrl("/")
         .invalidateHttpSession(true)
