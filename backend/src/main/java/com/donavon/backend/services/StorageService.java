@@ -28,6 +28,7 @@ public class StorageService {
 
   @Async
   public ResponseEntity<InputStreamResource> findByName(String fileName) {
+    // TODO: combine logic with ImageUploadService
     fileName = "n02088364_129.jpg";
     S3Object img = amazonS3.getObject(s3BucketName, fileName);
 
