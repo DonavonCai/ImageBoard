@@ -65,8 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-    /* FIXME: Enabling csrf causes 302 on /login
-     */
     http
       .cors()
         .and()
