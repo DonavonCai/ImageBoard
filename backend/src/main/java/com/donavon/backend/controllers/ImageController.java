@@ -15,18 +15,12 @@ import org.springframework.core.io.InputStreamResource;
 @RestController
 public class ImageController {
   @Autowired
-  private StorageService storageService;
-  // @Autowired
-  // private ImageDownloadService imageDownloadService;
+  private ImageDownloadService imageDownloadService;
   // @Autowired
   // private ImageUploadService imageUploadService;
 
   @GetMapping("/img")
   public ResponseEntity<InputStreamResource> getImage() throws IOException {
-    // todo: controller shouldn't know file name, move to service
-    var fileName = "n02088364_129.jpg";
-    // this.storageService.findByName(fileName);
-    // return this.imageDownloadService.getImage(fileName);
-    return this.storageService.findByName(fileName);
+    return this.imageDownloadService.getImage();
   }
 }
