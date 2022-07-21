@@ -1,4 +1,4 @@
-package com.donavon.backend.security;
+package com.donavon.backend.authenticationHandlers;
 
 public class LoginSuccessHandler {
 

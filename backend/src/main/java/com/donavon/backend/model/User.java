@@ -3,6 +3,7 @@ package com.donavon.backend.model;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,14 +22,13 @@ public class User implements UserDetails {
   @Indexed(unique = true)
   private String email;
   private String password;
-  private boolean accountNonLocked;
+  private boolean accountNonLocked = true;
   private int attempts;
 
   public User(String username, String email, String password) {
     this.username = username;
     this.email = email;
     this.password = password;
-    this.accountNonLocked = true;
     this.attempts = 0;
   }
 

@@ -3,6 +3,8 @@ package com.donavon.backend.controllers;
 // import com.donavon.backend.services.ImageUploadService;
 
 import com.donavon.backend.services.ImageDownloadService;
+import com.donavon.backend.services.StorageService;
+
 import java.io.IOException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +21,6 @@ public class ImageController {
 
   @GetMapping("/img")
   public ResponseEntity<InputStreamResource> getImage() throws IOException {
-    // todo: controller shouldn't know file name, move to service
-    var fileName = "julia-arte-qBMx4YIbPJY-unsplash.jpg";
-    return this.imageDownloadService.getImage(fileName);
+    return this.imageDownloadService.getImage();
   }
 }
