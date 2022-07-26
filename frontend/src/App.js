@@ -2,7 +2,7 @@ import React from 'react';
 import { FormModal } from './components/FormModal'
 import  { ImageGrid } from './components/ImageGrid'
 import './App.css'
-import { LogoutButton } from './components/LogoutButton';
+import { ProfileMenu } from './components/ProfileMenu';
 
 function App() {
   return (
@@ -10,10 +10,10 @@ function App() {
       <header className="App-header">
         <FormModal form="LoginForm"/>
         <FormModal form="RegisterForm"/>
-        <LogoutButton></LogoutButton>
+        <ProfileMenu></ProfileMenu>
       </header>
       <div id="Page-content">
-        <ImageGrid />
+        {/* <ImageGrid /> */}
       </div>
     </div>
   );
