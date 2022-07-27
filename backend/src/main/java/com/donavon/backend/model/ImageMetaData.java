@@ -1,6 +1,5 @@
 package com.donavon.backend.model;
 
-import java.net.URL;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -12,8 +11,7 @@ import lombok.Data;
 public class ImageMetaData {
   @Id
   private String id;
-  private URL imageURL;
-  private URL thumbnailURL;
-  private String author;
+  private String owner;
   private Date date;
+  private int likes;
 }
