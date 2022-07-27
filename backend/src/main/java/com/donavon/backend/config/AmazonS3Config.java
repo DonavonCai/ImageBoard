@@ -74,7 +74,7 @@ public class AmazonS3Config {
       System.out.println(e);
     }
 
-    // Something wrong with the secret, check secrets manager
+    // Something is wrong with the secret, check secrets manager on AWS console.
     if (getSecretValueResult.getSecretString() == null) {
       throw new SdkClientException("getSecretValueResult().getSecretString() is null.");
     }

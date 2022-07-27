@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -65,17 +66,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+    // Cors and CSRF
     http
       .cors()
         .and()
-      .csrf().ignoringAntMatchers("/userAuth**", "/img**", "/register**") // returns 403 forbidden if not authenticated
-        .and()
+      .csrf().ignoringAntMatchers("/userAuth**", "/img**", "/register**"); // returns 403 forbidden if not authenticated
+
+    // Session management
+    http
+      .sessionManagement()
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+    // Set unauthorized requests exception handler
+    // http
+    // .exceptionHandling()
+    // .authenticationEntryPoint(
+    //     (request, response, ex) -> {
+    //         response.sendError(
+    //             HttpServletResponse.SC_UNAUTHORIZED,
+    //             ex.getMessage()
+    //         );
+    //     }
+    // );
+
+    // Permissions on endpoints
+    http
       .authorizeRequests()
-        .antMatchers("/").permitAll()
-        .antMatchers("/login**").permitAll()
-        .antMatchers("/img**").permitAll()
-        .antMatchers("/register**").permitAll()
-        .and()
+      .antMatchers("/").permitAll()
+      .antMatchers("/login**").permitAll()
+      .antMatchers("/img**").permitAll()
+      .antMatchers("/register**").permitAll();
+
+    // Authentication handling
+    http
       .formLogin()
         .loginPage("/login")
         .loginProcessingUrl("/userAuth")
