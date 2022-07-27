@@ -13,7 +13,7 @@ function App() {
         <ProfileMenu></ProfileMenu>
       </header>
       <div id="Page-content">
-        {/* <ImageGrid /> */}
+        <ImageGrid />
       </div>
     </div>
   );

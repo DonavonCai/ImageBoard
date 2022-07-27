@@ -10,18 +10,25 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.springframework.stereotype.Service;
+
+import com.donavon.backend.model.ImageMetaData;
+import com.donavon.backend.repository.ImageRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.core.io.InputStreamResource;
 
 @Service
-public class ImageDownloadService {
+public class ImageService {
   @Autowired
   private ImageResizeService imageResizeService;
 
   @Autowired
   private StorageService storageService;
+
+  @Autowired
+  private ImageRepository imageMetaDataRepo;
 
   // Interface:
   // TODO: find a way to make this asynchronous?
@@ -44,8 +51,10 @@ public class ImageDownloadService {
            .body(new InputStreamResource(is));
   }
 
-  // Helpers:
-  // private File getFile(String fileName) throws FileNotFoundException{
-  //   return ResourceUtils.getFile("classpath:image/" + fileName);
-  // }
+  public ResponseEntity<?> putImage() {
+    // TODO: get this data from somewhere
+    ImageMetaData data = new ImageMetaData();
+    imageMetaDataRepo.insert(data);
+    return ResponseEntity.ok().body("created image");
+  }
 }
